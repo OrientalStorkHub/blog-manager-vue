@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import md5 from 'js-md5'
 export default {
   data() {
     return {
@@ -44,9 +45,17 @@ export default {
   },
   methods: {
     submitForm(formName) {
+      let that = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
+          this.$post('/auth/register', {
+            username: that.ruleForm.username,
+            name: that.ruleForm.name,
+            email: that.ruleForm.email,
+            password: that.ruleForm.password
+          }).then(res => {
+            console.log(res)
+          })
         } else {
           console.log('error submit!!');
           return false;

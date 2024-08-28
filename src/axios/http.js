@@ -3,30 +3,13 @@ import { Message } from "element-ui";
 import qs from 'qs'
 
 const instance = axios.create({
-  baseURL: 'http://localhost:9021',
+  baseURL: 'http://157.0.19.2:10065',
   timeout: 10000,
   headers: "application/json"
 });
 
 // 请求拦截器
 instance.interceptors.request.use(function (config) {
-  // const token = localStorage.getItem("token");
-  // if (token) {
-  //   config.headers['Authorization'] = token; // 将 Token 添加到请求头中
-  // }
-  // const id = localStorage.getItem("createId"); // 替换为您的实际id值
-  // if (config.url !== '/user/login') {
-  //   if (config.method === 'get') {
-  //     // 在params中添加id参数
-  //     if (!config.params) {
-  //       config.params = {};
-  //     }
-  //     config.params.createId = id;
-  //   } else {
-  //     config.data += '&createId=' + id
-  //   }
-  // }
-
   return config;
 }, function (error) {
   // 对请求错误做些什么
@@ -67,7 +50,7 @@ export function get(url, params) {
 
 export function post(url, params) {
   return new Promise((resolve, reject) => {
-    instance.post(url, qs.stringify(params))
+    instance.post(url, params)
       .then(res => {
         resolve(res.data);
       }).catch(err => {
