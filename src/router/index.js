@@ -53,8 +53,25 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title || 'blog';
-  next();
+  const token = localStorage.getItem('token');
+  const isPublic = to.name === 'login' || to.name === 'regist' || to.name === 'forget';
+
+  if (isPublic) {
+    // 如果是公共页面（登录、注册、忘记密码），则直接继续导航
+    next();
+  } else {
+    // 如果是需要认证的页面
+    if (!token) {
+      // 如果没有 token，跳转到登录页
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath } // 将目标路径作为查询参数传递，以便登录后重定向
+      });
+    } else {
+      // 如果有 token，继续导航
+      next();
+    }
+  }
 });
 
 export default router

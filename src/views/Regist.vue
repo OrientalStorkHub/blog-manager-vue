@@ -5,8 +5,8 @@
       <el-form-item label="用户名：" prop="username">
         <el-input v-model="ruleForm.username" placeholder="请输入用户名"></el-input>
       </el-form-item>
-      <el-form-item label="名称：" prop="name">
-        <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
+      <el-form-item label="名称：" prop="nickname">
+        <el-input v-model="ruleForm.nickname" placeholder="请输入名称"></el-input>
       </el-form-item>
       <el-form-item label="邮箱：" prop="email">
         <el-input v-model="ruleForm.email" placeholder="请输入邮箱"></el-input>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { Message } from 'element-ui';
 import md5 from 'js-md5'
 export default {
   data() {
@@ -31,8 +32,9 @@ export default {
 
       },
       rules: {
-        username: [{ required: true, message: '用户名不能为空', trigger: 'blur' },],
-        name: [{ required: true, message: '名称不能为空', trigger: 'blur' },],
+        username: [{ required: true, message: '用户名不能为空', trigger: 'blur' },
+        { pattern: /^[^@]+$/, message: '用户名不能包含 @ 符号', trigger: 'blur' }],
+        nickname: [{ required: true, message: '名称不能为空', trigger: 'blur' },],
         email: [
           { required: true, message: '邮箱不能为空', trigger: 'blur' },
           { type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur' }
@@ -50,11 +52,19 @@ export default {
         if (valid) {
           this.$post('/auth/register', {
             username: that.ruleForm.username,
-            name: that.ruleForm.name,
+            nickname: that.ruleForm.nickname,
             email: that.ruleForm.email,
             password: that.ruleForm.password
           }).then(res => {
-            console.log(res)
+            if (res.code == '200') {
+
+            } else {
+              Message.error(res.message);
+              if (res.code == '4009') {
+                this.ruleForm.username = '';
+              }
+            }
+
           })
         } else {
           console.log('error submit!!');

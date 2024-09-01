@@ -19,15 +19,11 @@ instance.interceptors.request.use(function (config) {
 
 // 添加响应拦截器
 instance.interceptors.response.use(function (response) {
-  // 对响应数据做点什么
-  console.log(response)
-  debugger
   // 判断响应是否成功
   if (response.data.code == 200) {
     return response;
   } else {
-    Message.error(response.data.data)
-    return null;
+    return response;
   }
 }, function (error) {
   // 对响应错误做点什么

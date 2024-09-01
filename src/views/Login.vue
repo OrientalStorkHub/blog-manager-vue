@@ -3,8 +3,8 @@
     <el-card class="login-card">
       <h2>登录</h2>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="ruleForm.username" placeholder="请输入用户名"></el-input>
+        <el-form-item label="用户名" prop="usernameOrEmail">
+          <el-input v-model="ruleForm.usernameOrEmail" placeholder="请输入用户名或邮箱"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input type="password" v-model="ruleForm.password" placeholder="请输入密码" show-password></el-input>
@@ -24,8 +24,8 @@ export default {
 
       },
       rules: {
-        username: [
-          { required: true, message: '用户名不能为空', trigger: 'blur' },
+        usernameOrEmail: [
+          { required: true, message: '用户名或邮箱不能为空', trigger: 'blur' },
         ],
         password: [
           { required: true, message: '密码不能为空', trigger: 'blur' }
@@ -40,7 +40,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log(this.ruleForm);
-          this.$post('/user/login', this.ruleForm, (res) => {
+          this.$post('/auth/login', this.ruleForm, (res) => {
             console.log(res);
           })
         } else {
