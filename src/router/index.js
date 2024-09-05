@@ -41,7 +41,13 @@ const routes = [
         path: '/user/list',
         component: () => import('../views/user/UserList.vue'),
         meta: { title: '用户列表' },
-      }
+      },
+      {
+        name: 'category',
+        path: '/category/list',
+        component: () => import('../views/category/List.vue'),
+        meta: { title: '分类列表' },
+      },
     ],
   },
 ]
@@ -53,7 +59,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('accessToken');
   const isPublic = to.name === 'login' || to.name === 'regist' || to.name === 'forget';
 
   if (isPublic) {

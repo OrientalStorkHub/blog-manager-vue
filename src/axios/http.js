@@ -10,6 +10,15 @@ const instance = axios.create({
 
 // 请求拦截器
 instance.interceptors.request.use(function (config) {
+  if (!config.url.includes('/login') && !config.url.includes('/regist')) {
+    // 假设 access-token 存储在 localStorage 中
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (accessToken && refreshToken) {
+      config.headers['access-token'] = accessToken;
+      config.headers['refresh-token'] = refreshToken;
+    }
+  }
   return config;
 }, function (error) {
   // 对请求错误做些什么
@@ -19,6 +28,7 @@ instance.interceptors.request.use(function (config) {
 
 // 添加响应拦截器
 instance.interceptors.response.use(function (response) {
+  console.log(response);
   // 判断响应是否成功
   if (response.data.code == 200) {
     return response;

@@ -42,6 +42,15 @@ export default {
           list: [
             { id: 21, name: '用户列表', url: '/user/list' },
           ]
+        },
+        {
+          id: 3,
+          name: '文章管理',
+          icon: 'el-icon-document',
+          url: '/article',
+          list: [
+            { id: 31, name: '文章分类', url: '/category/list' },
+          ]
         }
       ],
     }

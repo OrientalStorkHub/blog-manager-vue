@@ -34,7 +34,7 @@ export default {
   name: 'Header',
   data() {
     return {
-      username: 'admin',
+      username: '',
       dot: false, // 消息中心小红点数据
     };
   },
@@ -42,7 +42,8 @@ export default {
 
   },
   mounted() {
-
+    debugger
+    this.username = localStorage.getItem('nickName');
   },
 }
 </script>

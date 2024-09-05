@@ -1,13 +1,13 @@
 <template>
   <div class="base-div">
-    <div class="tags-div">
+    <!-- <div class="tags-div">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>首页</el-breadcrumb-item>
         <el-breadcrumb-item>活动管理</el-breadcrumb-item>
         <el-breadcrumb-item>活动列表</el-breadcrumb-item>
         <el-breadcrumb-item>活动详情</el-breadcrumb-item>
       </el-breadcrumb>
-    </div>
+    </div> -->
     <div class="main-div"> <router-view></router-view> </div>
   </div>
 </template>

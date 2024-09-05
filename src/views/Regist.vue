@@ -24,7 +24,6 @@
 
 <script>
 import { Message } from 'element-ui';
-import md5 from 'js-md5'
 export default {
   data() {
     return {
@@ -50,7 +49,7 @@ export default {
       let that = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$post('/auth/register', {
+          this.$post('/api/auth/register', {
             username: that.ruleForm.username,
             nickname: that.ruleForm.nickname,
             email: that.ruleForm.email,

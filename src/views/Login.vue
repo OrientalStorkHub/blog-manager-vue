@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { Message } from 'element-ui';
+
 export default {
   data() {
     return {
@@ -39,9 +41,22 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.ruleForm);
-          this.$post('/auth/login', this.ruleForm, (res) => {
-            console.log(res);
+          this.$post('/api/auth/login', this.ruleForm).then(res => {
+            if (res.code == '200') {
+              // 存token
+              localStorage.setItem('accessToken', res.data.accessToken);
+              localStorage.setItem('refreshToken', res.data.refreshToken);
+              localStorage.setItem('nickName', res.data.nickName);
+
+              const redirect = this.$route.query.redirect;
+              if (redirect) {
+                this.$router.push(redirect); // 跳转到重定向路径
+              } else {
+                this.$router.push('/index'); // 如果没有重定向路径，跳转到默认页面
+              }
+            } else {
+              Message.error(res.message);
+            }
           })
         } else {
           console.log('error submit!!');
