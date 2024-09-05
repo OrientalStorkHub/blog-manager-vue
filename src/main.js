@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import './style/index.scss'
 import baseMethods from './api/base.js';
 import { get, post, put, del } from './axios/http.js'
+import { Message } from "element-ui";
 
 
 Vue.config.productionTip = false
@@ -20,6 +21,7 @@ Vue.prototype.$get = get
 Vue.prototype.$post = post
 Vue.prototype.$put = put
 Vue.prototype.$del = del
+Vue.prototype.$message = Message;
 
 Vue.use(ElementUI);
 

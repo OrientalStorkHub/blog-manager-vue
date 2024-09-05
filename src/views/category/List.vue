@@ -2,7 +2,7 @@
   <div class="base-div">
     <div class="search-div">
       <el-input size="small" placeholder="请输入分类名称" v-model="search_text" clearable></el-input>
-      <el-button size="small" type="primary">搜索</el-button>
+      <el-button size="small" type="primary" @click="listPage()">搜索</el-button>
       <el-button size="small" class="add-btn" type="primary" @click="add()">新增</el-button>
     </div>
     <div class="list-div">
@@ -13,8 +13,8 @@
         </el-table-column>
         <el-table-column label="操作" align="center" width="120">
           <template slot-scope="scope">
-            <el-button type="text" size="small">编辑</el-button>
-            <el-button @click="handleClick(scope.row)" type="text" size="small">删除</el-button>
+            <el-button type="text" size="small" @click="edit(scope.row.id, scope.row.name)">编辑</el-button>
+            <el-button @click="deleteRow(scope.row.id)" type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -35,7 +35,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="categoryVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addSubmit()">确 定</el-button>
+        <el-button type="primary" @click="addOrUpdateSubmit()">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -64,8 +64,29 @@ export default {
     };
   },
   methods: {
+    deleteRow(id) {
+      let that = this;
+      var ids = [id];
+      that.$post('/api/content/category/batch/delete', {
+        categoryIds: ids
+      }).then(res => {
+        if (res.code == '200') {
+          that.listPage()
+        } else {
+          that.$message.error(res.message);
+        }
+      })
+    },
+    edit(id, name) {
+      this.categoryForm = {
+        id: id,
+        name: name
+      };
+      console.log(this.categoryForm);
+      this.categoryVisible = true;
+    },
     handleCurrentChange() {
-
+      this.listPage()
     },
     handleClick(row) {
       console.log(row);
@@ -74,18 +95,22 @@ export default {
       this.categoryForm = {};
       this.categoryVisible = true;
     },
-    addSubmit() {
+    addOrUpdateSubmit() {
       let that = this;
       that.$refs.categoryForm.validate((valid) => {
         if (valid) {
-          this.$post('/api/content/category/insert', {
-            name: that.categoryForm.name
-          }).then(res => {
+          var url = '/api/content/category/insert';
+          if (that.categoryForm.id) {
+            url = '/api/content/category/update';
+          }
+          this.$post(url, that.categoryForm).then(res => {
             if (res.code == '200') {
-              this.categoryVisible = false;
-              Message.success(res.message);
+              that.categoryVisible = false;
+              that.$message.success(res.message);
+              that.listPage();
             } else {
-              Message.error(res.message);
+              that.categoryVisible = false;
+              that.$message.error(res.message);
             }
           })
         }
@@ -104,7 +129,7 @@ export default {
           that.page.current = res.data.currentPage
           that.page.size = res.data.pageSize
         } else {
-          Message.error(res.message);
+          that.$message.error(res.message);
         }
       })
     }
